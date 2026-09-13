@@ -1,0 +1,235 @@
+/* Color Palette & Basic Setup */
+:root {
+    --nss-blue: #0f204b;
+    --nss-red: #d32f2f;
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --border-color: #e0e0e0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+/* Header Styling */
+.portal-header {
+    background-color: var(--nss-blue);
+    color: white;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.nss-logo {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.header-titles h1 {
+    font-size: 1.5rem;
+    margin-bottom: 2px;
+}
+
+.header-titles p {
+    font-size: 0.9rem;
+    color: #a0aec0;
+}
+
+/* Main Container & Card */
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.form-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    background: #eaeff2;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    background: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    background: #e0e6ea;
+}
+
+.tab-btn.active {
+    background: var(--card-bg);
+    color: var(--nss-blue);
+    border-bottom: 3px solid var(--nss-red);
+}
+
+/* Form Sections */
+.form-section {
+    display: none;
+    padding: 40px;
+}
+
+.form-section.active-section {
+    display: block;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-section h2 {
+    color: var(--nss-blue);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    color: var(--nss-red);
+    margin: 30px 0 15px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+}
+
+/* Inputs & Grid Layout */
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text-main);
+}
+
+.input-group input, 
+.input-group select, 
+.input-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus, 
+.input-group select:focus, 
+.input-group textarea:focus {
+    outline: none;
+    border-color: var(--nss-blue);
+    box-shadow: 0 0 0 3px rgba(15, 32, 75, 0.1);
+}
+
+/* Checkboxes */
+.row-checkboxes {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.consent-box {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    margin-bottom: 25px;
+}
+
+.consent-label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+/* Buttons */
+.primary-btn {
+    background-color: var(--nss-red);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.primary-btn:hover {
+    background-color: #b71c1c;
+}
+
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.forgot-link {
+    color: var(--nss-blue);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .grid-2-col {
+        grid-template-columns: 1fr;
+    }
+    .form-section {
+        padding: 20px;
+    }
+}
