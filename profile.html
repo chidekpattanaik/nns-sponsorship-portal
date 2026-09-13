@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSS Profile Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nss-blue: #0f204b;
+            --nss-red: #d32f2f;
+            --bg-color: #f4f7f6;
+            --text-dark: #2d3436;
+            --border: #dfe6e9;
+            --sidebar-width: 280px;
+            --sidebar-collapsed: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            overflow: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--nss-blue);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed);
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            white-space: nowrap;
+        }
+
+        /* Hamburger Menu Icon (3 lines) */
+        .menu-toggle {
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.collapsed .sidebar-header h2 {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Navigation Links */
+        .nav-links {
+            list-style: none;
+            padding: 20px 0;
+            flex: 1; /* Pushes logout to the bottom */
+        }
+
+        .nav-links li {
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s, border-left 0.1s;
+            border-left: 4px solid transparent;
+            white-space: nowrap;
+        }
+
+        .nav-links li:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-links li.active {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--nss-red);
+            font-weight: 500;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            min-width: 30px;
+            text-align: center;
+            margin-right: 15px;
+        }
+
+        .nav-text {
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Logout Section - Separated at bottom */
+        .logout-section {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            color: #ff7675;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 6px;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 118, 117, 0.1);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        /* Views */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        h1 { color: var(--nss-blue); margin-bottom: 20px; font-size: 1.8rem; }
+        h3 { color: var(--nss-red); margin-bottom: 10px; }
+        p { color: #636e72; line-height: 1.6; }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h2>NSS Portal</h2>
+        </div>
+        
+        <ul class="nav-links">
+            <li class="active" onclick="switchView('dashboard', this)">
+                <span class="nav-icon">⊞</span>
+                <span class="nav-text">Dashboard</span>
+            </li>
+            <li onclick="switchView('edit-profile', this)">
+                <span class="nav-icon">✎</span>
+                <span class="nav-text">Edit Profile</span>
+            </li>
+            <li onclick="switchView('sponsorship', this)">
+                <span class="nav-icon">📄</span>
+                <span class="nav-text">Sponsorship</span>
+            </li>
+            <li onclick="switchView('nss-event', this)">
+                <span class="nav-icon">⭐</span>
+                <span class="nav-text">NSS Event</span>
+            </li>
+            <li onclick="switchView('documents', this)">
+                <span class="nav-icon">📁</span>
+                <span class="nav-text">NSS Certificates & Documents</span>
+            </li>
+            <li onclick="switchView('notifications', this)">
+                <span class="nav-icon">🔔</span>
+                <span class="nav-text">Notifications</span>
+            </li>
+        </ul>
+
+        <div class="logout-section">
+            <div class="logout-btn" onclick="window.location.href='index.html'">
+                <span class="nav-icon">🚪</span>
+                <span class="nav-text">Logout</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Dynamic Area -->
+    <main class="main-content">
+        
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="view-section active">
+            <!-- This ID allows JavaScript to update the name dynamically -->
+            <h1 id="welcome-text">Welcome back, Alumni!</h1>
+            <div class="card">
+                <h3>Impact Overview</h3>
+                <p>Welcome to your personal NSS portal. Use the sidebar menu to navigate through active sponsorship proposals, update your professional details, or retrieve your past NSS certificates.</p>
+            </div>
+        </div>
+
+        <!-- Edit Profile View -->
+        <div id="edit-profile-view" class="view-section">
+            <h1>Edit Profile</h1>
+            <div class="card">
+                <h3>Update Your Details</h3>
+                <p>(Backend Team: Insert form fields here to update current occupation, company, and contact details.)</p>
+            </div>
+        </div>
+
+        <!-- Sponsorship View -->
+        <div id="sponsorship-view" class="view-section">
+            <h1>Sponsorship Proposals</h1>
+            <div class="card">
+                <h3>Active College Initiatives</h3>
+                <p>(Backend Team: Generate a feed of upcoming mega-events requesting funding broadcasted by the current unit here.)</p>
+            </div>
+        </div>
+
+        <!-- NSS Event View -->
+        <div id="nss-event-view" class="view-section">
+            <h1>Sponsor an NSS Event</h1>
+            <div class="card">
+                <h3>Commit Funds Securely</h3>
+                <p>(Backend Team: Insert payment gateway integration or pledge submission form here.)</p>
+            </div>
+        </div>
+
+        <!-- Documents View -->
+        <div id="documents-view" class="view-section">
+            <h1>NSS Certificates & Documents</h1>
+            <div class="card">
+                <h3>Your Vault</h3>
+                <p>View or download your verified NSS participation certificates and graduation logs.</p>
+            </div>
+        </div>
+
+        <!-- Notifications View -->
+        <div id="notifications-view" class="view-section">
+            <h1>Notifications</h1>
+            <div class="card">
+                <h3>Recent Alerts</h3>
+                <p>No new notifications at this time.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Hamburger Menu Toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        // Switch Main Content Views
+        function switchView(viewName, clickedElement) {
+            const views = document.querySelectorAll('.view-section');
+            views.forEach(view => {
+                view.classList.remove('active');
+            });
+
+            const menuItems = document.querySelectorAll('.nav-links li');
+            menuItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            document.getElementById(viewName + '-view').classList.add('active');
+            clickedElement.classList.add('active');
+        }
+
+        // Automatically load the logged-in user's name from localStorage
+        window.addEventListener('DOMContentLoaded', () => {
+            const userName = localStorage.getItem("loggedInName");
+            if (userName) {
+                document.getElementById('welcome-text').innerText = `Welcome back, ${userName}!`;
+            }
+        });
+    </script>
+</body>
+</html>
